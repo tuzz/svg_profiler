@@ -13,6 +13,15 @@ class SVGProfiler::Inkscape
     exec("-H").to_i
   end
 
+  def yield_png(&block)
+    tmp = Tempfile.new(["tmp", ".png"])
+    write_png(tmp.path)
+    yield tmp
+  ensure
+    tmp.close
+    tmp.unlink
+  end
+
   private
   def check_for_inkscape
     unless system("which inkscape &>/dev/null")
@@ -28,6 +37,12 @@ class SVGProfiler::Inkscape
     input.close
 
     `inkscape -z #{command} #{input.path}`
+  ensure
+    input.unlink
+  end
+
+  def write_png(path)
+    exec("-e #{path}")
   end
 
   class DependencyError < StandardError; end

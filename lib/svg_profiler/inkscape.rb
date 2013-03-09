@@ -2,11 +2,7 @@ class SVGProfiler::Inkscape
 
   def initialize(xml)
     check_for_inkscape
-
-    input = Tempfile.new(["input", ".svg"])
-    input.write(xml.to_s)
-    input.close
-    @path = input.path
+    @xml = xml
   end
 
   def width
@@ -27,7 +23,11 @@ class SVGProfiler::Inkscape
   end
 
   def exec(command)
-    `inkscape -z #{command} #@path`
+    input = Tempfile.new(["input", ".svg"])
+    input.write(@xml.to_s)
+    input.close
+
+    `inkscape -z #{command} #{input.path}`
   end
 
   class DependencyError < StandardError; end

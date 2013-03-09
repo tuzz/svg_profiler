@@ -15,14 +15,6 @@ describe SVGProfiler do
       profile = SVGProfiler.new(fixture("seychelles.svg"))
       profile.dimensions.should == [900, 450]
     end
-
-    it "does not break for unusual cases" do
-      profile = SVGProfiler.new("<svg width='100' viewBox='-1 ??? 50 200'/>")
-      profile.dimensions.should == [100, 200]
-
-      profile = SVGProfiler.new("<svg height='50'>")
-      profile.dimensions.should == [0, 50]
-    end
   end
 
   describe "#width" do

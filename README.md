@@ -2,6 +2,15 @@
 
 Profiles a Scalable Vector Graphics xml string.
 
+## Setup
+
+SVG Profiler depends on an open-source application called Inkscape.
+
+```
+brew install inkscape
+gem install svg_profiler
+```
+
 ## Usage
 
 ```ruby

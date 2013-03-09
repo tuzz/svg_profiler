@@ -8,6 +8,5 @@ Gem::Specification.new do |s|
   s.files       = ["README.md"] + Dir["lib/**/*.*"]
   s.homepage    = "https://github.com/cpatuzzo/svg_profiler"
 
-  s.add_dependency "nokogiri"
   s.add_development_dependency "rspec"
 end

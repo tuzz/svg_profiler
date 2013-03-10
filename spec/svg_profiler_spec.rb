@@ -38,10 +38,10 @@ describe SVGProfiler do
     end
   end
 
-  describe "#colors" do
+  describe "#histogram" do
     it "returns a histogram hash of the hex color ratios" do
       profile = SVGProfiler.new(fixture("togo.svg"))
-      colors = profile.colors
+      histogram = profile.histogram
 
       # For the togo flag, the ratios are roughly:
       expected_color_ratios = {
@@ -52,15 +52,15 @@ describe SVGProfiler do
       }
 
       expected_color_ratios.each do |hex, ratio|
-        colors[hex].should be_within(0.01).of(ratio)
+        histogram[hex].should be_within(0.01).of(ratio)
       end
     end
 
     it "accepts an optional threshold to compensate for antialiasing" do
       profile = SVGProfiler.new(fixture("togo.svg"))
 
-      # Filter out colors that appear less than five percent of the time
-      colors = profile.colors(0.05)
+      # Filter out histogram that appear less than five percent of the time
+      histogram = profile.histogram(0.05)
 
       # After filtering out AA colors, the ratios are almost exactly:
       expected_color_ratios = {
@@ -70,10 +70,10 @@ describe SVGProfiler do
       }
 
       expected_color_ratios.each do |hex, ratio|
-        colors[hex].should be_within(0.000005).of(ratio)
+        histogram[hex].should be_within(0.000005).of(ratio)
       end
 
-      colors.keys.should_not include("#FFFFFF")
+      histogram.keys.should_not include("#FFFFFF")
     end
   end
 

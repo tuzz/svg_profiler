@@ -20,7 +20,7 @@ class SVGProfiler
     width.to_f / height
   end
 
-  def colors(threshold = 0)
+  def histogram(threshold = 0)
     @inkscape.yield_png { |png| Histogram.for(png, threshold) }
   end
 

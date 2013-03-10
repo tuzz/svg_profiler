@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = "svg_profiler"
-  s.version     = "1.1.0"
+  s.version     = "1.1.1"
   s.summary     = "SVG Profiler"
   s.description = "Profiles a Scalable Vector Graphics xml string."
   s.author      = "Chris Patuzzo"

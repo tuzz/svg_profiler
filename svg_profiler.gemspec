@@ -9,5 +9,7 @@ Gem::Specification.new do |s|
   s.homepage    = "https://github.com/cpatuzzo/svg_profiler"
 
   s.add_dependency "rmagick"
+  s.add_dependency "svg_palette"
+
   s.add_development_dependency "rspec"
 end

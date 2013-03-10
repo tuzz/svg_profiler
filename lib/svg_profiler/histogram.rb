@@ -1,15 +1,18 @@
 class SVGProfiler::Histogram
 
-  def self.for(png, threshold)
-    new(png).histogram(threshold)
+  WARN_THRESHOLD = 0.02
+
+  def self.for(xml_string, png)
+    new(xml_string, png).histogram
   end
 
-  def initialize(png)
+  def initialize(xml_string, png)
     check_for_imagemagick
     @image = Magick::Image.read(png.path).first
+    @palette = SVGPalette.parse(xml_string)
   end
 
-  def histogram(threshold)
+  def histogram
     @image.quantize(8) # 00-FF is 8-bits.
 
     histogram = @image.color_histogram
@@ -17,11 +20,8 @@ class SVGProfiler::Histogram
       hash.merge(to_hex(p) => f)
     end
 
-    ratios = normalize(frequencies)
-    ratios.reject! { |_, v| v < threshold }
-
-    # Re-normalize after thresholding.
-    normalize(ratios)
+    filter_by_palette!(frequencies)
+    normalize(frequencies)
   end
 
   private
@@ -36,6 +36,30 @@ class SVGProfiler::Histogram
   def to_hex(pixel)
     # The first two parameters are ignored by RMagick.
     pixel.to_color(Magick::AllCompliance, false, 8, true)
+  end
+
+  # When the png is created, it gets anti-aliased.
+  # If it is down-sampled, you'll end up with many midway colors.
+  # These have a negligible pixel count and could be thresholded out.
+  # This seems like a better approach, assuming the palette is correct.
+  def filter_by_palette!(hash)
+    hex_codes = @palette.map(&:html)
+    pre_filter = normalize(hash)
+
+    hash.reject! do |k, v|
+      if !hex_codes.include?(k.downcase)
+        warn_if_filtering_a_prominent_color(k, pre_filter)
+        true
+      end
+    end
+  end
+
+  def warn_if_filtering_a_prominent_color(hex, normalized)
+    if normalized[hex] > WARN_THRESHOLD
+      puts "\n#{__FILE__}:#{__LINE__}"
+      puts "WARNING: '#{hex}' was been assumed to be an artifact of anti-aliasing when perhaps it was not."
+      puts "Please email your SVG to chris@patuzzo.co.uk, with a subject of `SVG Filter Threshold'."
+    end
   end
 
   def normalize(frequencies)

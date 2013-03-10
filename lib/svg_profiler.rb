@@ -1,6 +1,7 @@
 require "tempfile"
 
 require "rmagick"
+require "svg_palette"
 
 require "svg_profiler/base"
 require "svg_profiler/inkscape"

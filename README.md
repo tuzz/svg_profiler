@@ -32,16 +32,9 @@ profile.histogram
 #=> { "#FF0000" => 0.7, "#FFFFFF" => 0.29, "#000000" => 0.01 }
 ```
 
-You may find that the SVG is [antialiased](http://en.wikipedia.org/wiki/Spatial_anti-aliasing) before the histogram is calculated.
+When calculating the histogram, the SVG is rasterized to a PNG and anti-aliased.
 
-You can pass an optional threshold to the `#histogram` method, to help cope with this:
-
-```ruby
-profile.histogram(0.02)
-#=> { "#FF0000" => 0.7070707070707071, "#FFFFFF" => 0.29292929292929293 }
-```
-
-The sum of the values in the hash will always add up to one.
+This may have a small impact on the color ratios.
 
 ## Contribution
 

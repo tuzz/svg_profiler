@@ -54,26 +54,8 @@ describe SVGProfiler do
       expected_color_ratios.each do |hex, ratio|
         histogram[hex].should be_within(0.01).of(ratio)
       end
-    end
 
-    it "accepts an optional threshold to compensate for antialiasing" do
-      profile = SVGProfiler.new(fixture("togo.svg"))
-
-      # Filter out histogram that appear less than five percent of the time
-      histogram = profile.histogram(0.05)
-
-      # After filtering out AA colors, the ratios are almost exactly:
-      expected_color_ratios = {
-        "#006A4E" => 0.46377, # green
-        "#FFCE00" => 0.33456, # yellow
-        "#D21034" => 0.20167  # red
-      }
-
-      expected_color_ratios.each do |hex, ratio|
-        histogram[hex].should be_within(0.000005).of(ratio)
-      end
-
-      histogram.keys.should_not include("#FFFFFF")
+      histogram.size.should == 4
     end
   end
 

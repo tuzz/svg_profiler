@@ -47,7 +47,7 @@ class SVGProfiler::Histogram
     pre_filter = normalize(hash)
 
     hash.reject! do |k, v|
-      if !hex_codes.include?(k.downcase)
+      unless hex_codes.include?(k.downcase) || black?(k)
         warn_if_filtering_a_prominent_color(k, pre_filter)
         true
       end
@@ -60,6 +60,12 @@ class SVGProfiler::Histogram
       puts "WARNING: '#{hex}' was been assumed to be an artifact of anti-aliasing when perhaps it was not."
       puts "Please email your SVG to chris@patuzzo.co.uk, with a subject of `SVG Filter Threshold'."
     end
+  end
+
+  # In cases where nodes do not explicitly set a color, they will be black.
+  # Therefore, do not filter out black from the histogram.
+  def black?(hex)
+    hex == "#000000"
   end
 
   def normalize(frequencies)

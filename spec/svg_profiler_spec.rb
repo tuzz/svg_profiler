@@ -57,6 +57,12 @@ describe SVGProfiler do
 
       histogram.size.should == 4
     end
+
+    it "does not filter out black" do
+      profile = SVGProfiler.new(fixture("south_africa.svg"))
+      histogram = profile.histogram
+      histogram["#000000"].should_not be_nil, "Black is being filtered out"
+    end
   end
 
 end

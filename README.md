@@ -28,17 +28,16 @@ profile.height
 profile.aspect
 #=> 1.5
 
-# The #colors method calculates the histogram for the SVG.
-profile.colors
+profile.histogram
 #=> { "#FF0000" => 0.7, "#FFFFFF" => 0.29, "#000000" => 0.01 }
 ```
 
 You may find that the SVG is [antialiased](http://en.wikipedia.org/wiki/Spatial_anti-aliasing) before the histogram is calculated.
 
-You can pass an optional threshold to the `#colors` method, to help cope with this:
+You can pass an optional threshold to the `#histogram` method, to help cope with this:
 
 ```ruby
-profile.colors(0.02)
+profile.histogram(0.02)
 #=> { "#FF0000" => 0.7070707070707071, "#FFFFFF" => 0.29292929292929293 }
 ```
 
